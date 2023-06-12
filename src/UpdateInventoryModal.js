@@ -104,11 +104,17 @@ export const UpdateInventoryModal = ({
             rows={filteredRows}
             columns={newColumns}
             processRowUpdate={(params) => {
-              updatedRows.push({
-                id: params.id,
-                "LOCATION A STOCK": params["LOCATION A STOCK"],
-                "LOC B STOCK": params["LOC B STOCK"],
-              });
+              if (typeof params["LOCATION A STOCK"] === "number") {
+                updatedRows.push({
+                  id: params.id,
+                  "LOCATION A STOCK": params["LOCATION A STOCK"],
+                });
+              } else if (typeof params["LOC B STOCK"] === "number") {
+                updatedRows.push({
+                  id: params.id,
+                  "LOC B STOCK": params["LOC B STOCK"],
+                });
+              }
             }}
             initialState={{
               columns: {
