@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Modal, Box, Typography, Button, Alert, Snackbar } from "@mui/material";
+import { DataGrid, GridEditInputCell } from "@mui/x-data-grid";
+import { Modal, Box, Typography, Button } from "@mui/material";
 import axios from "axios";
+import { CustomSnackbar } from "./CustomSnackbar";
 
 export const UpdateInventoryModal = ({
   modal,
@@ -11,6 +12,9 @@ export const UpdateInventoryModal = ({
   columns,
 }) => {
   const [newColumns, setNewColumns] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("");
   let updatedRows = [];
 
   useEffect(() => {
@@ -38,6 +42,14 @@ export const UpdateInventoryModal = ({
             width: 150,
             editable: true,
             type: "number",
+            renderEditCell: (params) => (
+              <GridEditInputCell
+                {...params}
+                inputProps={{
+                  min: 0,
+                }}
+              />
+            ),
           });
           return acc;
         case "LOC B STOCK":
@@ -62,7 +74,6 @@ export const UpdateInventoryModal = ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -78,6 +89,9 @@ export const UpdateInventoryModal = ({
       });
       setFilteredRows(res.data);
       setModal(false);
+      setOpen(true);
+      setMessage("Stock Successfully Updated");
+      setSeverity("success");
     } catch (error) {
       console.log(error);
     }
@@ -91,6 +105,12 @@ export const UpdateInventoryModal = ({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
+        <CustomSnackbar
+          open={open}
+          setOpen={setOpen}
+          message={message}
+          severity={severity}
+        />
         <Typography
           id="modal-modal-title"
           variant="h6"
@@ -104,7 +124,11 @@ export const UpdateInventoryModal = ({
             rows={filteredRows}
             columns={newColumns}
             processRowUpdate={(params) => {
-              if (typeof params["LOCATION A STOCK"] === "number") {
+              if (params["LOCATION A STOCK"] < 0 || params["LOC B STOCK"] < 0) {
+                setOpen(true);
+                setMessage("Stock value must be greater than 0");
+                setSeverity("warning");
+              } else if (typeof params["LOCATION A STOCK"] === "number") {
                 updatedRows.push({
                   id: params.id,
                   "LOCATION A STOCK": params["LOCATION A STOCK"],

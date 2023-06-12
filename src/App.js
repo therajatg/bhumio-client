@@ -8,6 +8,7 @@ import axios from "axios";
 import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { UpdateInventoryModal } from "./UpdateInventoryModal";
+import { CustomSnackbar } from "./CustomSnackbar";
 
 function App() {
   const [rows, setRows] = useState([]);
@@ -19,13 +20,6 @@ function App() {
   useEffect(() => {
     getGridData();
   }, []);
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen(false);
-  };
 
   const getGridData = async () => {
     try {
@@ -99,16 +93,12 @@ function App() {
 
   return (
     <Box sx={{ m: 4 }}>
-      <Snackbar
+      <CustomSnackbar
         open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          Successfully Deleted!
-        </Alert>
-      </Snackbar>
+        setOpen={setOpen}
+        message={"Successfully Deleted!"}
+        severity={"success"}
+      />
       <Box
         sx={{
           display: "flex",
