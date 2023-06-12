@@ -59,6 +59,14 @@ export const UpdateInventoryModal = ({
             width: 150,
             editable: true,
             type: "number",
+            renderEditCell: (params) => (
+              <GridEditInputCell
+                {...params}
+                inputProps={{
+                  min: 0,
+                }}
+              />
+            ),
           });
           return acc;
         default:
