@@ -29,7 +29,7 @@ function App() {
 
   const getGridData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000");
+      const res = await axios.get("https://topaz-humane-night.glitch.me");
       setRows(res.data);
       setFilteredRows(res.data);
     } catch (error) {
@@ -51,7 +51,7 @@ function App() {
   const deleteHandler = async (params) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/${params.target.value}`
+        `https://topaz-humane-night.glitch.me/${params.target.value}`
       );
       setRows(res.data);
       setFilteredRows(res.data);

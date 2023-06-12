@@ -73,7 +73,7 @@ export const UpdateInventoryModal = ({
 
   const saveDataHandler = async () => {
     try {
-      const res = await axios.put("http://localhost:5000", {
+      const res = await axios.put("https://topaz-humane-night.glitch.me", {
         updatedRows,
       });
       setFilteredRows(res.data);
