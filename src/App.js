@@ -31,15 +31,21 @@ function App() {
     }
   };
 
+  // 000-202-0019	202-0160-10	PULLY PVC 6P
   const filterHandler = () => {
-    const trimedFilteredText = filterText.trim();
-    setFilteredRows(
-      rows.filter(
-        (row) =>
-          row["Part #"].includes(trimedFilteredText) ||
-          row["Alt.Part#"].includes(trimedFilteredText)
-      )
-    );
+    const filterTextArray = filterText.split(",");
+    let newRows = [];
+    filterTextArray.forEach((text) => {
+      newRows.push(
+        ...rows.filter(
+          (row) =>
+            row["Part #"].includes(text.trim()) ||
+            row["Alt.Part#"].includes(text.trim())
+        )
+      );
+      console.log("newRows", text, newRows);
+    });
+    setFilteredRows(newRows);
   };
 
   const deleteHandler = async (params) => {
